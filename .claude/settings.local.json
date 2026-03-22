@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Applications/DEV/Let''''''''s play/TestMMZ_SpeseTrack/**)",
+      "Bash(npm run:*)"
+    ]
+  }
+}
