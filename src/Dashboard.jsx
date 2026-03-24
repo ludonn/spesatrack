@@ -248,22 +248,6 @@ export default function Dashboard({ user }) {
         {/* ── Tab: Home ── */}
         {activeTab === 'home' && (
           <div className="tab-content">
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-label">Totale {isMeseCorrente ? 'questo mese' : 'del mese'}</div>
-                <div className="stat-value">{formatCurrency(totaleMese)}</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-label">Media giornaliera</div>
-                <div className="stat-value">{formatCurrency(mediaGiornaliera)}</div>
-              </div>
-            </div>
-
-            <div className="month-nav">
-              <button onClick={mesePrecedente} className="btn-icon">←</button>
-              <span className="month-label">{nomeMese}{isMeseCorrente && ' ·'}{isMeseCorrente && <span style={{ color: 'var(--primary)', fontWeight: 400 }}> corrente</span>}</span>
-              <button onClick={meseSuccessivo} className="btn-icon" disabled={isMeseCorrente}>→</button>
-            </div>
 
             <div className="card">
               <h2 className="card-title">Nuova spesa</h2>
@@ -294,6 +278,23 @@ export default function Dashboard({ user }) {
                   {saving ? 'Salvataggio...' : 'Aggiungi spesa'}
                 </button>
               </form>
+            </div>
+
+            <div className="month-nav">
+              <button onClick={mesePrecedente} className="btn-icon">←</button>
+              <span className="month-label">{nomeMese}{isMeseCorrente && ' ·'}{isMeseCorrente && <span style={{ color: 'var(--primary)', fontWeight: 400 }}> corrente</span>}</span>
+              <button onClick={meseSuccessivo} className="btn-icon" disabled={isMeseCorrente}>→</button>
+            </div>
+
+            <div className="stats-grid">
+              <div className="stat-card">
+                <div className="stat-label">Totale {isMeseCorrente ? 'questo mese' : 'del mese'}</div>
+                <div className="stat-value">{formatCurrency(totaleMese)}</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-label">Media giornaliera</div>
+                <div className="stat-value">{formatCurrency(mediaGiornaliera)}</div>
+              </div>
             </div>
 
             {ricorrenti.length > 0 && (
