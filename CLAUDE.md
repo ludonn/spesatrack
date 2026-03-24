@@ -15,7 +15,7 @@ npm run preview   # anteprima del build di produzione
 
 SPA React + Vite senza routing. Un'unica pagina che mostra `Auth` o `Dashboard` in base alla sessione Supabase.
 
-**Flusso auth:** `App.jsx` ascolta `onAuthStateChange` e passa `session.user` a `Dashboard`. Non ci sono route protette — il gate è un semplice ternario in `App.jsx`. L'auth usa `signInWithPassword` (email+password, non magic link) — l'email è solo un identificatore, non serve che la casella esista realmente. La conferma email va disattivata in Supabase Dashboard → Authentication → Providers → Email.
+**Flusso auth:** `App.jsx` ascolta `onAuthStateChange` e passa `session.user` a `Dashboard`. Non ci sono route protette — il gate è un semplice ternario in `App.jsx`. L'auth usa `signInWithPassword` (email+password, non magic link) — l'email è solo un identificatore, non serve che la casella esista realmente. La conferma email è attiva: dopo la registrazione `Auth.jsx` mostra un messaggio di successo verde ("Sei a un passo...") tramite stato `registered`.
 
 **Backend:** Supabase (PostgreSQL + Auth). Nessun server custom — tutta la logica dati è in `Dashboard.jsx` via Supabase JS client (`src/supabase.js`).
 
@@ -31,11 +31,17 @@ SPA React + Vite senza routing. Un'unica pagina che mostra `Auth` o `Dashboard` 
 
 **Navigazione:** Bottom tab bar con 3 tab — `home` (analisi + form nuova spesa + ricorrenti), `storico` (lista spese del mese), `impostazioni` (categorie, budget, template ricorrenti). Stato `activeTab` in `Dashboard.jsx`.
 
+**Ordine sezioni Home:** 1) Nuova spesa (card con bottone + per aprire/chiudere il form, stato `formOpen`), 2) Navigazione mese (← mese →), 3) Totali (stats-grid: totale mese + media giornaliera), 4) Ricorrenti (se presenti), 5) Per categoria (con budget bar).
+
 **Stili:** Due file CSS:
 - `src/index.css` — reset globale minimale (`box-sizing`, `body margin`, `#root min-height`)
 - `src/App.css` — design system completo con variabili CSS (`--primary: #6366f1`, `--bg`, `--surface`, ecc.), classi utility (`.card`, `.input`, `.btn-primary`, `.btn-full`, `.cat-badge`, `.budget-bar-*`, ecc.)
 
-**Classi principali:** `.app` (layout colonna, max-width 600px), `.app-header` (sticky), `.app-main` (padding-bottom 5.5rem per la bottom nav), `.bottom-nav` (fixed, z-index 10), `.form-grid` (griglia 2 colonne per i form), `.stat-card`, `.spesa-item`, `.cat-badge`.
+**Classi principali:** `.app` (layout colonna, max-width 600px), `.app-header` (sticky), `.app-main` (padding-bottom 5.5rem per la bottom nav), `.bottom-nav` (fixed, z-index 10), `.form-grid` (griglia 2 colonne per i form), `.stat-card`, `.spesa-item`, `.cat-badge`, `.card-title-row` (flex row con titolo + bottone toggle), `.btn-add-toggle` (bottone + circolare viola, diventa ✕ quando aperto), `.auth-success` (messaggio verde post-registrazione).
+
+**DB — vincoli rimossi:** Il constraint `spese_categoria_check` sulla colonna `categoria` è stato eliminato (`ALTER TABLE spese DROP CONSTRAINT spese_categoria_check`) per supportare le categorie personalizzate.
+
+**Deploy:** L'app è deployata su Vercel. Le variabili `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` vanno configurate in Vercel → Settings → Environment Variables (sono pubbliche by design — la sicurezza è garantita da RLS).
 
 ## Variabili d'ambiente
 
