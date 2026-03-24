@@ -26,6 +26,7 @@ export default function Dashboard({ user }) {
   const [activeTab, setActiveTab] = useState('home');
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState(null);
+  const [formOpen, setFormOpen] = useState(false);
 
   // Form aggiungi spesa
   const [importo, setImporto] = useState('');
@@ -122,6 +123,7 @@ export default function Dashboard({ user }) {
       setCategoria(tutteLeCategorie[0]);
       setData(new Date().toISOString().slice(0, 10));
       setNota('');
+      setFormOpen(false);
     } catch (error) {
       console.error("Errore nell'aggiunta della spesa:", error.message);
       setSaveError("Errore nel salvataggio. Riprova.");
@@ -250,34 +252,45 @@ export default function Dashboard({ user }) {
           <div className="tab-content">
 
             <div className="card">
-              <h2 className="card-title">Nuova spesa</h2>
-              <form onSubmit={aggiungiSpesa}>
-                <div className="form-grid">
-                  <input
-                    type="number" placeholder="Importo (€)" value={importo}
-                    onChange={e => setImporto(e.target.value)}
-                    required step="0.01" min="0" autoComplete="off" className="input"
-                  />
-                  <select value={categoria} onChange={e => setCategoria(e.target.value)} className="input">
-                    {tutteLeCategorie.map(c => (
-                      <option key={c} value={c}>{getCatMeta(c).emoji} {c}</option>
-                    ))}
-                  </select>
-                  <input
-                    type="date" value={data}
-                    onChange={e => setData(e.target.value)}
-                    required className="input"
-                  />
-                  <input
-                    type="text" placeholder="Nota (opzionale)" value={nota}
-                    onChange={e => setNota(e.target.value)} className="input" maxLength={200}
-                  />
-                </div>
-                {saveError && <p className="form-error">{saveError}</p>}
-                <button type="submit" className="btn-primary btn-full" disabled={saving}>
-                  {saving ? 'Salvataggio...' : 'Aggiungi spesa'}
+              <div className="card-title-row">
+                <h2 className="card-title">Nuova spesa</h2>
+                <button
+                  className={`btn-add-toggle${formOpen ? ' open' : ''}`}
+                  onClick={() => { setFormOpen(o => !o); setSaveError(null); }}
+                  aria-label={formOpen ? 'Chiudi form' : 'Aggiungi spesa'}
+                >
+                  {formOpen ? '✕' : '+'}
                 </button>
-              </form>
+              </div>
+              {formOpen && (
+                <form onSubmit={aggiungiSpesa}>
+                  <div className="form-grid">
+                    <input
+                      type="number" placeholder="Importo (€)" value={importo}
+                      onChange={e => setImporto(e.target.value)}
+                      required step="0.01" min="0" autoComplete="off" className="input"
+                    />
+                    <select value={categoria} onChange={e => setCategoria(e.target.value)} className="input">
+                      {tutteLeCategorie.map(c => (
+                        <option key={c} value={c}>{getCatMeta(c).emoji} {c}</option>
+                      ))}
+                    </select>
+                    <input
+                      type="date" value={data}
+                      onChange={e => setData(e.target.value)}
+                      required className="input"
+                    />
+                    <input
+                      type="text" placeholder="Nota (opzionale)" value={nota}
+                      onChange={e => setNota(e.target.value)} className="input" maxLength={200}
+                    />
+                  </div>
+                  {saveError && <p className="form-error">{saveError}</p>}
+                  <button type="submit" className="btn-primary btn-full" disabled={saving}>
+                    {saving ? 'Salvataggio...' : 'Aggiungi spesa'}
+                  </button>
+                </form>
+              )}
             </div>
 
             <div className="month-nav">
