@@ -7,6 +7,7 @@ export default function Auth() {
   const [password, setPassword] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState(null);
+  const [registered, setRegistered] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -29,6 +30,7 @@ export default function Auth() {
     try {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
+      setRegistered(true);
     } catch (error) {
       setError('Registrazione non riuscita. Controlla i dati e riprova.');
     } finally {
@@ -66,6 +68,7 @@ export default function Auth() {
           </button>
         </form>
         {error && <p className="auth-error">{error}</p>}
+        {registered && <p className="auth-success">Sei a un passo dal tracciare le tue spese! Conferma la tua email 📧</p>}
         <p className="auth-toggle">
           {isRegistering ? 'Hai già un account? ' : 'Non hai un account? '}
           <a href="#" onClick={(e) => { e.preventDefault(); setIsRegistering(!isRegistering); setError(null); }}>
