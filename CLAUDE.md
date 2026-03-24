@@ -15,7 +15,7 @@ npm run preview   # anteprima del build di produzione
 
 SPA React + Vite senza routing. Un'unica pagina che mostra `Auth` o `Dashboard` in base alla sessione Supabase.
 
-**Flusso auth:** `App.jsx` ascolta `onAuthStateChange` e passa `session.user` a `Dashboard`. Non ci sono route protette — il gate è un semplice ternario in `App.jsx`. L'auth usa `signInWithPassword` (email+password, non magic link) — l'email è solo un identificatore, non serve che la casella esista realmente. La conferma email è attiva: dopo la registrazione `Auth.jsx` mostra un messaggio di successo verde ("Sei a un passo...") tramite stato `registered`.
+**Flusso auth:** `App.jsx` ascolta `onAuthStateChange` e passa `session.user` a `Dashboard`. Non ci sono route protette — il gate è un semplice ternario in `App.jsx`. L'auth usa `signInWithPassword` (email+password, non magic link). La conferma email è attiva: dopo la registrazione `Auth.jsx` mostra un messaggio di successo verde ("Sei a un passo...") tramite stato `registered`.
 
 **Backend:** Supabase (PostgreSQL + Auth). Nessun server custom — tutta la logica dati è in `Dashboard.jsx` via Supabase JS client (`src/supabase.js`).
 
@@ -41,7 +41,7 @@ SPA React + Vite senza routing. Un'unica pagina che mostra `Auth` o `Dashboard` 
 
 **DB — vincoli rimossi:** Il constraint `spese_categoria_check` sulla colonna `categoria` è stato eliminato (`ALTER TABLE spese DROP CONSTRAINT spese_categoria_check`) per supportare le categorie personalizzate.
 
-**Deploy:** L'app è deployata su Vercel. Le variabili `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` vanno configurate in Vercel → Settings → Environment Variables (sono pubbliche by design — la sicurezza è garantita da RLS).
+**Deploy:** L'app è deployata su Vercel. Le variabili `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` sono configurate in Vercel e sono pubbliche by design — la sicurezza è garantita da RLS.
 
 ## Variabili d'ambiente
 
